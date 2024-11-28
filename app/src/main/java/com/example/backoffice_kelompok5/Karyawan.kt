@@ -1,6 +1,6 @@
 package com.example.backoffice_kelompok5
 
-class Karyawan(
+data class Karyawan(
     val nama: String,
     val divisi: String,
     val status: String,
