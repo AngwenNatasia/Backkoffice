@@ -18,8 +18,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnKaryawan.setOnClickListener {
-            val intent = Intent(this, Karyawan::class.java)
-            startActivity(intent)
+//            val intent = Intent(this, Karyawan::class.java)
+//            startActivity(intent)
         }
     }
 }
