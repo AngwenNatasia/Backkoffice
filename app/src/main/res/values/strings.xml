@@ -5,4 +5,9 @@
     <string name="selanjutnya">Selanjutnya</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+<<<<<<< HEAD
+=======
+    <string name="open">Buka Navigasi</string>
+    <string name="close">Tutup Navigasi</string>
+>>>>>>> c89fce139eca288fd352d6a59e93ac1d7610afe0
 </resources>
