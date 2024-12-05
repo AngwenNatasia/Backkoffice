@@ -18,10 +18,6 @@ class Admin : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//
-//        val toolbar: Toolbar = binding.toolbarAwal
-//        setSupportActionBar(toolbar)
-//        supportActionBar!!.title = ""
 
         val tabLayout: TabLayout = binding.tabLayout
         val viewPager: ViewPager = binding.viewPager
