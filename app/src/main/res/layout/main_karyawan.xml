@@ -25,7 +25,7 @@
                 android:fontFamily="@font/sarcolenta"
                 android:gravity="center"
                 android:text="Selamat Datang Karyawan"
-                android:textColor="#800080"
+                android:textColor="#D769CD"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 

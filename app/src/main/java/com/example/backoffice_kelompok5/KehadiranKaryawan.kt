@@ -1,59 +1,46 @@
 package com.example.backoffice_kelompok5
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [KehadiranKaryawan.newInstance] factory method to
- * create an instance of this fragment.
- */
 class KehadiranKaryawan : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_kehadiran_karyawan, container, false)
-    }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment KehadiranKaryawan.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            KehadiranKaryawan().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        val view = inflater.inflate(R.layout.fragment_kehadiran_karyawan, container, false)
+
+        val nama = view.findViewById<EditText>(R.id.nama)
+        val divisi = view.findViewById<EditText>(R.id.divisi)
+        val status = view.findViewById<EditText>(R.id.status)
+        val tanggalHadir = view.findViewById<EditText>(R.id.tanggal_hadir)
+        val submitButton = view.findViewById<Button>(R.id.submit)
+
+        submitButton.setOnClickListener {
+            val namaKaryawan = nama.text.toString()
+            val divisiKaryawan = divisi.text.toString()
+            val statusKaryawan = status.text.toString()
+            val tanggal = tanggalHadir.text.toString()
+
+            if (namaKaryawan.isNotEmpty() && divisiKaryawan.isNotEmpty() && statusKaryawan.isNotEmpty() && tanggal.isNotEmpty()) {
+                Toast.makeText(
+                    requireContext(),
+                    "Presensi $namaKaryawan dari divisi $divisiKaryawan dengan status $statusKaryawan pada tanggal $tanggal telah dicatat.",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                Toast.makeText(requireContext(), "Harap isi semua field.", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        return view
     }
 }
