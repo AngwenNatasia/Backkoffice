@@ -27,7 +27,6 @@ class CutiKaryawan : Fragment() {
         val tanggal = view.findViewById<EditText>(R.id.tanggal_cuti)
         val submitButton = view.findViewById<Button>(R.id.submit)
 
-        // Referensi ke Firebase Realtime Database
         val database = FirebaseDatabase.getInstance().reference
 
         submitButton.setOnClickListener {
@@ -38,22 +37,18 @@ class CutiKaryawan : Fragment() {
             val tanggalCuti = tanggal.text.toString()
             val keteranganCuti = keterangan.text.toString()
 
-            // Validasi inputan
             if (namaKaryawan.isNotEmpty() && divisiKaryawan.isNotEmpty() && keteranganCuti.isNotEmpty() && lama.isNotEmpty() && statusKaryawan.isNotEmpty() && tanggalCuti.isNotEmpty()) {
 
-                // Membuat objek Cuti
-                val durasi = lama.toIntOrNull() ?: 0 // Jika durasi tidak valid, set 0
+                val durasi = lama.toIntOrNull() ?: 0
                 val cuti = Cuti(namaKaryawan, durasi, tanggalCuti, divisiKaryawan, keteranganCuti, statusKaryawan)
 
-                // Menyimpan data ke Firebase Database
-                val cutiId = database.child("cuti").push().key // Membuat ID unik untuk cuti
+                val cutiId = database.child("cuti").push().key
                 if (cutiId != null) {
                     database.child("cuti").child(cutiId).setValue(cuti)
                         .addOnSuccessListener {
-                            // Menampilkan Toast sukses
+
                             Toast.makeText(requireContext(), "Cuti berhasil dicatat.", Toast.LENGTH_LONG).show()
 
-                            // Mengosongkan field input setelah data tersimpan
                             nama.text.clear()
                             divisi.text.clear()
                             status.text.clear()
@@ -62,13 +57,11 @@ class CutiKaryawan : Fragment() {
                             tanggal.text.clear()
                         }
                         .addOnFailureListener {
-                            // Menampilkan Toast gagal
                             Toast.makeText(requireContext(), "Gagal mencatat cuti.", Toast.LENGTH_SHORT).show()
                         }
                 }
 
             } else {
-                // Menampilkan Toast jika ada field yang kosong
                 Toast.makeText(requireContext(), "Harap isi semua field.", Toast.LENGTH_SHORT).show()
             }
         }
