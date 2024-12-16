@@ -26,7 +26,6 @@ class LemburKaryawan : Fragment() {
         val tanggalHadir = view.findViewById<EditText>(R.id.tanggal_lembur)
         val submitButton = view.findViewById<Button>(R.id.submit)
 
-        // Referensi ke Firebase Realtime Database
         val database = FirebaseDatabase.getInstance().reference
 
         submitButton.setOnClickListener {
@@ -36,22 +35,19 @@ class LemburKaryawan : Fragment() {
             val lama = lamaLembur.text.toString()
             val tanggal = tanggalHadir.text.toString()
 
-            // Validasi inputan
             if (namaKaryawan.isNotEmpty() && divisiKaryawan.isNotEmpty() && lama.isNotEmpty() && statusKaryawan.isNotEmpty() && tanggal.isNotEmpty()) {
 
-                // Membuat objek Lembur
-                val durasi = lama.toIntOrNull() ?: 0 // Jika lama lembur tidak valid, set 0
+
+                val durasi = lama.toIntOrNull() ?: 0
                 val lembur = Lembur(namaKaryawan, durasi, tanggal, divisiKaryawan, statusKaryawan)
 
-                // Menyimpan data ke Firebase Database
-                val lemburId = database.child("lembur").push().key // Membuat ID unik untuk lembur
+                val lemburId = database.child("lembur").push().key
                 if (lemburId != null) {
                     database.child("lembur").child(lemburId).setValue(lembur)
                         .addOnSuccessListener {
-                            // Menampilkan Toast sukses
+
                             Toast.makeText(requireContext(), "Lembur berhasil dicatat.", Toast.LENGTH_LONG).show()
 
-                            // Mengosongkan field input setelah data tersimpan
                             nama.text.clear()
                             divisi.text.clear()
                             status.text.clear()
@@ -59,13 +55,11 @@ class LemburKaryawan : Fragment() {
                             tanggalHadir.text.clear()
                         }
                         .addOnFailureListener {
-                            // Menampilkan Toast gagal
                             Toast.makeText(requireContext(), "Gagal mencatat lembur.", Toast.LENGTH_SHORT).show()
                         }
                 }
 
             } else {
-                // Menampilkan Toast jika ada field yang kosong
                 Toast.makeText(requireContext(), "Harap isi semua field.", Toast.LENGTH_SHORT).show()
             }
         }

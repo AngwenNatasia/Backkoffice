@@ -27,7 +27,7 @@ class IzinKaryawan : Fragment() {
         val tanggalIzin = view.findViewById<EditText>(R.id.tanggal_izin)
         val submitButton = view.findViewById<Button>(R.id.submit)
 
-        // Referensi ke Firebase Realtime Database
+
         val database = FirebaseDatabase.getInstance().reference
 
         submitButton.setOnClickListener {
@@ -38,22 +38,20 @@ class IzinKaryawan : Fragment() {
             val tanggal = tanggalIzin.text.toString()
             val keteranganIzin = keterangan.text.toString()
 
-            // Validasi inputan
+
             if (namaKaryawan.isNotEmpty() && divisiKaryawan.isNotEmpty() && keteranganIzin.isNotEmpty() && lama.isNotEmpty() && statusKaryawan.isNotEmpty() && tanggal.isNotEmpty()) {
 
-                // Membuat objek Izin
-                val durasi = lama.toIntOrNull() ?: 0 // Jika durasi tidak valid, set 0
+                val durasi = lama.toIntOrNull() ?: 0
                 val izin = Izin(namaKaryawan, durasi, tanggal, divisiKaryawan, keteranganIzin, statusKaryawan)
 
-                // Menyimpan data ke Firebase Database
-                val izinId = database.child("izin").push().key // Membuat ID unik untuk izin
+                val izinId = database.child("izin").push().key
                 if (izinId != null) {
                     database.child("izin").child(izinId).setValue(izin)
                         .addOnSuccessListener {
-                            // Menampilkan Toast sukses
+
                             Toast.makeText(requireContext(), "Izin berhasil dicatat.", Toast.LENGTH_LONG).show()
 
-                            // Mengosongkan field input setelah data tersimpan
+
                             nama.text.clear()
                             divisi.text.clear()
                             status.text.clear()
@@ -62,13 +60,13 @@ class IzinKaryawan : Fragment() {
                             tanggalIzin.text.clear()
                         }
                         .addOnFailureListener {
-                            // Menampilkan Toast gagal
+
                             Toast.makeText(requireContext(), "Gagal mencatat izin.", Toast.LENGTH_SHORT).show()
                         }
                 }
 
             } else {
-                // Menampilkan Toast jika ada field yang kosong
+
                 Toast.makeText(requireContext(), "Harap isi semua field.", Toast.LENGTH_SHORT).show()
             }
         }
