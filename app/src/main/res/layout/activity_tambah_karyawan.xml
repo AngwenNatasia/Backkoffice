@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TAMBAH KARYAWAN"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:paddingBottom="16dp"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/gradient_button"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <EditText
+        android:id="@+id/in_nama"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:hint="Nama Karyawan"
+        android:background="#EAF5FF"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header" />
+
+    <EditText
+        android:id="@+id/in_divisi"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:hint="Divisi"
+        android:background="#EAF5FF"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/in_nama"/>
+
+    <EditText
+        android:id="@+id/in_jabatan"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:hint="Jabatan"
+        android:background="#EAF5FF"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/in_divisi" />
+
+    <EditText
+        android:id="@+id/in_departemen"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:hint="Departemen"
+        android:background="#EAF5FF"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/in_jabatan" />
+
+    <EditText
+        android:id="@+id/in_jenisKelamin"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:hint="Jenis Kelamin"
+        android:background="#EAF5FF"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/in_departemen" />
+
+    <Button
+        android:id="@+id/simpanKywn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#D769CD"
+        android:textColor="#FFFFFF"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/in_jenisKelamin"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

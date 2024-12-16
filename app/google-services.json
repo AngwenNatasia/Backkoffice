@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "180346708345",
+    "firebase_url": "https://mobile-56c90-default-rtdb.firebaseio.com",
+    "project_id": "mobile-56c90",
+    "storage_bucket": "mobile-56c90.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:180346708345:android:6bb4eb324a0eda67bf8fa8",
+        "android_client_info": {
+          "package_name": "com.example.backoffice_kelompok5"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJSjoPSE0Majm2g34o7Lu9TdRxxLen6-c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
