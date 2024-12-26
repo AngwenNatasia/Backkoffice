@@ -24,6 +24,7 @@
         </activity>
         <activity android:name=".MainActivityKaryawan" />
         <activity android:name=".Login" />
+        <activity android:name=".Register" />
         <activity android:name=".Admin" />
         <activity android:name=".HalamanJadwal" />
         <activity android:name=".HalamanManajemenData" />

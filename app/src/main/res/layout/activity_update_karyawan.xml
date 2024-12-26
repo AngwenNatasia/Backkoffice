@@ -33,7 +33,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header" />
 
-    <EditText
+    <Spinner
         android:id="@+id/up_divisi"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/up_jabatan" />
 
-    <EditText
+    <Spinner
         android:id="@+id/up_jenisKelamin"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
@@ -80,6 +80,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/up_departemen" />
+
+    <EditText
+        android:id="@+id/up_noHP"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:hint="Nomor HP"
+        android:inputType="phone"
+        android:background="#EAF5FF"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/up_jenisKelamin" />
+
+    <EditText
+        android:id="@+id/up_tglGabung"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:hint="Tanggal Bergabung"
+        android:inputType="date"
+        android:focusable="false"
+        android:clickable="false"
+        android:background="#EAF5FF"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/up_noHP" />
 
     <Button
         android:id="@+id/up_submitKywn"
@@ -92,7 +120,7 @@
         android:padding="12dp"
         app:layout_constraintEnd_toStartOf="@id/del_submitKywn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/up_jenisKelamin"/>
+        app:layout_constraintTop_toBottomOf="@id/up_tglGabung"/>
 
     <Button
         android:id="@+id/del_submitKywn"
@@ -105,6 +133,6 @@
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/up_submitKywn"
-        app:layout_constraintTop_toBottomOf="@id/up_jenisKelamin" />
+        app:layout_constraintTop_toBottomOf="@id/up_tglGabung" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

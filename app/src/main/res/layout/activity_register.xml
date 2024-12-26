@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E0FFFF"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="65dp"
+            android:layout_marginEnd="65dp"
+            android:layout_marginBottom="30dp"
+            android:src="@drawable/admin" />
+
+        <EditText
+            android:id="@+id/res_Nama"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:layout_margin="12dp"
+            android:hint="Nama"
+            android:inputType="text"
+            android:layout_gravity="center"
+            android:background="@color/white" />
+
+        <EditText
+            android:id="@+id/res_Email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:layout_margin="12dp"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:layout_gravity="center"
+            android:background="@color/white" />
+
+        <EditText
+            android:id="@+id/res_Password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:layout_margin="12dp"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:layout_gravity="center"
+            android:background="@color/white" />
+
+        <EditText
+            android:id="@+id/res_ConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:layout_margin="12dp"
+            android:hint="Confirm Password"
+            android:inputType="textPassword"
+            android:layout_gravity="center"
+            android:background="@color/white" />
+
+        <Spinner
+            android:id="@+id/res_Divisi"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:layout_margin="12dp"
+            android:background="@color/white"
+            android:hint="Divisi"
+            android:inputType="text"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:backgroundTint="@null"
+            android:background="@drawable/gradient_button"
+            android:textColor="#FFFFFF"
+            android:text="Register"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+</ScrollView>

@@ -33,7 +33,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header" />
 
-    <EditText
+    <Spinner
         android:id="@+id/in_divisi"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/in_jabatan" />
 
-    <EditText
+    <Spinner
         android:id="@+id/in_jenisKelamin"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
@@ -80,6 +80,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/in_departemen" />
+
+    <EditText
+        android:id="@+id/in_noHP"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:hint="Nomor HP"
+        android:inputType="phone"
+        android:background="#EAF5FF"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/in_jenisKelamin" />
+
+    <EditText
+        android:id="@+id/in_tglGabung"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:hint="Tanggal Bergabung"
+        android:inputType="date"
+        android:focusable="false"
+        android:clickable="false"
+        android:background="#EAF5FF"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/in_noHP" />
 
     <Button
         android:id="@+id/simpanKywn"
@@ -93,5 +121,5 @@
         android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/in_jenisKelamin"/>
+        app:layout_constraintTop_toBottomOf="@id/in_tglGabung"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
