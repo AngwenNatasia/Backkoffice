@@ -35,11 +35,6 @@ class Login : AppCompatActivity() {
                 loginUser(email, password)
             }
         }
-//
-//        binding.buttonExit.setOnClickListener {
-//            startActivity(Intent(this, MainActivity::class.java))
-//            finish()
-//        }
     }
 
     private fun loginUser(email: String, password: String) {
@@ -52,19 +47,22 @@ class Login : AppCompatActivity() {
                             val storedPassword = userSnapshot.child("password").value.toString()
                             if (storedPassword == password) {
                                 // Ambil data pengguna
-                                val nama = userSnapshot.child("nama").value?.toString() ?: ""
-                                val role = userSnapshot.child("role").value?.toString() ?: ""
+                                val userId = userSnapshot.child("id").value.toString()
+                                val nama = userSnapshot.child("nama").value.toString()
+                                val divisi = userSnapshot.child("divisi").value.toString()
+                                val role = userSnapshot.child("role").value.toString()
 
                                 // Simpan sesi pengguna ke SharedPreferences
                                 val editor = sharedPreferences.edit()
                                 editor.putBoolean("isLoggedIn", true)
-                                editor.putString("email", email)
+                                editor.putString("userId", userId) // Simpan id
                                 editor.putString("nama", nama)
+                                editor.putString("divisi", divisi)
                                 editor.putString("role", role)
                                 editor.apply()
 
                                 // Tampilkan pesan dan pindah aktivitas sesuai role
-                                Toast.makeText(this@Login, "Selamat datang, $nama!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@Login, "Selamat datang, $nama dari divisi $divisi!", Toast.LENGTH_SHORT).show()
                                 navigateBasedOnRole(role)
                                 return
                             }
