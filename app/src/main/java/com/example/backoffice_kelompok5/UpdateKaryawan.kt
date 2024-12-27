@@ -9,7 +9,7 @@ import java.util.*
 class UpdateKaryawan: AppCompatActivity() {
     private lateinit var dbRef: DatabaseReference
     private lateinit var karyawanId: String
-    private lateinit var tglGabung: Date
+    private lateinit var tglGabung: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,8 +51,8 @@ class UpdateKaryawan: AppCompatActivity() {
                     upDepartemen.setText(karyawan.departemen)
                     upJenisKelamin.setSelection(jenisKelaminOptions.indexOf(karyawan.jenisKelamin))
                     upNoHp.setText(karyawan.noHP)
-                    upTglGabung.setText(karyawan.tglGabung.toString())
                     tglGabung = karyawan.tglGabung
+                    upTglGabung.setText(tglGabung)
 
                 } else {
                     Toast.makeText(this, "Karyawan tidak ditemukan", Toast.LENGTH_SHORT).show()

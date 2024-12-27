@@ -5,6 +5,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.*
 import java.util.*
+import java.text.SimpleDateFormat
 
 class TambahKaryawan: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +42,9 @@ class TambahKaryawan: AppCompatActivity() {
             val noHP = noHP.text.toString().trim()
 
             val currentDate = Date()
-            tglGabung.setText(currentDate.toString())
+            val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val formattedDate = dateFormatter.format(currentDate)
+            tglGabung.setText(formattedDate)
 
             if (nama.isEmpty() or divisi.isEmpty() or jabatan.isEmpty() or departemen.isEmpty() or jenisKelamin.isEmpty()) {
                 Toast.makeText(this, "Data tidak boleh kosong!", Toast.LENGTH_SHORT).show()
@@ -57,7 +60,7 @@ class TambahKaryawan: AppCompatActivity() {
                 departemen = departemen,
                 jenisKelamin = jenisKelamin,
                 noHP = noHP,
-                tglGabung = currentDate
+                tglGabung = formattedDate
             )
 
             // Simpan ke Firebase

@@ -10,7 +10,7 @@ data class Karyawan(
     val departemen: String,
     val jenisKelamin: String,
     val noHP: String,
-    val tglGabung: Date
+    val tglGabung: String
 ) {
-    constructor() : this("", "", "", "", "", "", "", Date())
+    constructor() : this("", "", "", "", "", "", "", "")
 }
