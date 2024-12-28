@@ -32,5 +32,8 @@
         <activity android:name=".TambahKaryawan" />
         <activity android:name=".UpdateJadwal" />
         <activity android:name=".UpdateKaryawan" />
+        <activity android:name=".FormIzinActivity" />
+        <activity android:name=".FormCutiActivity" />
+        <activity android:name=".FormLemburActivity" />
     </application>
 </manifest>

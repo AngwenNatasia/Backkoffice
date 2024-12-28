@@ -1,93 +1,165 @@
 package com.example.backoffice_kelompok5
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import android.view.MenuItem
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.fragment.app.FragmentTransaction
-import com.google.android.material.navigation.NavigationView
-import com.example.backoffice_kelompok5.databinding.ActivityMainBinding
-import com.example.backoffice_kelompok5.databinding.ActivityMainKaryawanBinding
-import com.example.backoffice_kelompok5.CutiKaryawan
-import com.example.backoffice_kelompok5.IzinKaryawan
-import com.example.backoffice_kelompok5.KehadiranKaryawan
-import com.example.backoffice_kelompok5.LemburKaryawan
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.*
+import java.text.SimpleDateFormat
+import java.util.*
 
-class MainActivityKaryawan : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-
-    private lateinit var binding: ActivityMainKaryawanBinding
-    lateinit var toggle: ActionBarDrawerToggle
-    lateinit var cutiFragment: CutiKaryawan
-    lateinit var izinFragment: IzinKaryawan
-    lateinit var kehadiranFragment: KehadiranKaryawan
-    lateinit var lemburFragment: LemburKaryawan
+class MainActivityKaryawan : AppCompatActivity() {
+    private lateinit var tvWelcome: TextView
+    private lateinit var tvSchedule: TextView
+    private lateinit var btnHadir: Button
+    private lateinit var database: DatabaseReference
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainKaryawanBinding.inflate(layoutInflater)
+        setContentView(R.layout.main_karyawan)
 
-        setContentView(binding.root)
+        tvWelcome = findViewById(R.id.tv_welcome)
+        tvSchedule = findViewById(R.id.tv_schedule)
+        btnHadir = findViewById(R.id.btn_hadir)
+        sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
 
-        toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
-        binding.drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+        // Inisialisasi Firebase Database
+        database = FirebaseDatabase.getInstance().reference
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.navView.setNavigationItemSelectedListener(this)
+        // Tampilkan nama dan jadwal pengguna
+        displayUserName()
+        displayUserSchedule()
+
+        // Tombol "Hadir" untuk mencatat presensi
+        btnHadir.setOnClickListener {
+            markAttendance()
+        }
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.hadir -> {
-                kehadiranFragment = KehadiranKaryawan()
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.frame_layout, kehadiranFragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .commit()
-                Toast.makeText(applicationContext, "Ini Halaman Kehadiran", Toast.LENGTH_SHORT).show()
-            }
-            R.id.izin -> {
-                izinFragment = IzinKaryawan()
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.frame_layout, izinFragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .commit()
-                Toast.makeText(applicationContext, "Ini Halaman Izin", Toast.LENGTH_SHORT).show()
-            }
-            R.id.cuti -> {
-                cutiFragment = CutiKaryawan()
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.frame_layout, cutiFragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .commit()
-                Toast.makeText(applicationContext, "Ini Halaman Cuti", Toast.LENGTH_SHORT).show()
-            }
-            R.id.lembur -> {
-                lemburFragment = LemburKaryawan()
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.frame_layout, lemburFragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .commit()
-                Toast.makeText(applicationContext, "Ini Halaman Lembur", Toast.LENGTH_SHORT).show()
+    private fun displayUserName() {
+        val userId = sharedPreferences.getString("userId", null)
+        if (userId.isNullOrEmpty()) {
+            tvWelcome.text = "Selamat Datang, User"
+            return
+        }
+
+        database.child("auth").child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val nama = snapshot.child("nama").getValue(String::class.java) ?: "User"
+                    tvWelcome.text = "Selamat Datang, $nama"
+                } else {
+                    tvWelcome.text = "Selamat Datang, User"
+                }
             }
 
-        }
-        binding.drawerLayout.closeDrawers()
-        return true
+            override fun onCancelled(error: DatabaseError) {
+                tvWelcome.text = "Selamat Datang, User"
+                Toast.makeText(
+                    this@MainActivityKaryawan,
+                    "Gagal memuat data: ${error.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
     }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (toggle.onOptionsItemSelected(item)) {
-            return true
-        }
-        return super.onOptionsItemSelected(item)
 
+    private fun displayUserSchedule() {
+        val userId = sharedPreferences.getString("userId", null)
+        if (userId.isNullOrEmpty()) {
+            tvSchedule.text = "Schedule: Tidak tersedia"
+            return
+        }
+
+        // Ambil nama pengguna dari Firebase
+        database.child("auth").child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    // Ambil nama pengguna
+                    val nama = snapshot.child("nama").getValue(String::class.java) ?: "User"
+
+                    // Sekarang ambil jadwal berdasarkan nama (tanpa menampilkan nama)
+                    database.child("jadwal").orderByChild("nama").equalTo(nama)
+                        .addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(jadwalSnapshot: DataSnapshot) {
+                                if (jadwalSnapshot.exists()) {
+                                    // Ambil jadwal pertama yang ditemukan dengan nama yang cocok
+                                    val jadwal = jadwalSnapshot.children.firstOrNull()?.getValue(Jadwal::class.java)
+                                    if (jadwal != null) {
+                                        // Menampilkan jadwal (tanpa menampilkan nama)
+                                        tvSchedule.text = "Jadwal: ${jadwal.hari}, ${jadwal.jamMasuk} - ${jadwal.jamKeluar}"
+                                    } else {
+                                        tvSchedule.text = "Schedule: Tidak tersedia"
+                                    }
+                                } else {
+                                    tvSchedule.text = "Schedule: Tidak tersedia"
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                tvSchedule.text = "Schedule: Tidak tersedia"
+                                Toast.makeText(
+                                    this@MainActivityKaryawan,
+                                    "Gagal memuat jadwal: ${error.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        })
+                } else {
+                    tvSchedule.text = "Schedule: Tidak tersedia"
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                tvSchedule.text = "Schedule: Tidak tersedia"
+                Toast.makeText(
+                    this@MainActivityKaryawan,
+                    "Gagal memuat data: ${error.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+    }
+
+
+    private fun markAttendance() {
+        val userId = sharedPreferences.getString("userId", null)
+        if (userId.isNullOrEmpty()) {
+            Toast.makeText(this, "User ID tidak ditemukan!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        database.child("auth").child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val nama = snapshot.child("nama").getValue(String::class.java) ?: "User"
+                    val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+
+                    // Simpan ke tabel presensi
+                    val presensiData = mapOf(
+                        "nama" to nama,
+                        "timestamp" to timestamp
+                    )
+
+                    database.child("presensi").push().setValue(presensiData)
+                        .addOnSuccessListener {
+                            Toast.makeText(this@MainActivityKaryawan, "Presensi berhasil dicatat!", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(this@MainActivityKaryawan, "Gagal mencatat presensi!", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Toast.makeText(this@MainActivityKaryawan, "Data pengguna tidak ditemukan!", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@MainActivityKaryawan, "Gagal memuat data: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
