@@ -28,6 +28,7 @@
         <activity android:name=".Admin" />
         <activity android:name=".HalamanJadwal" />
         <activity android:name=".HalamanManajemenData" />
+        <activity android:name=".HalamanIzinCuti" />
         <activity android:name=".TambahJadwal" />
         <activity android:name=".TambahKaryawan" />
         <activity android:name=".UpdateJadwal" />

@@ -86,7 +86,7 @@ class UpdateJadwal : AppCompatActivity() {
     }
 
     private fun fetchKaryawanData() {
-        val karyawanRef = FirebaseDatabase.getInstance().getReference("karyawan")
+        val karyawanRef = FirebaseDatabase.getInstance().getReference("auth")
         karyawanRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 karyawanNamaList.clear()

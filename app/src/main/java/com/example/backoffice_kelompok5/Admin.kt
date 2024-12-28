@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.example.backoffice_kelompok5.Fragment.ManajemenDataFragment
 import com.example.backoffice_kelompok5.Fragment.JadwalFragment
+import com.example.backoffice_kelompok5.Fragment.IzinCutiFragment
 import com.example.backoffice_kelompok5.databinding.ActivityAdminBinding
 import com.google.android.material.tabs.TabLayout
 
@@ -25,6 +26,7 @@ class Admin : AppCompatActivity() {
 
         viewPagerAdapter.tambahFragment(JadwalFragment(), "Jadwal")
         viewPagerAdapter.tambahFragment(ManajemenDataFragment(), "Manajemen Data")
+        viewPagerAdapter.tambahFragment(IzinCutiFragment(), "Manajemen Izin & Cuti")
 
         viewPager.adapter = viewPagerAdapter
         tabLayout.setupWithViewPager(viewPager)

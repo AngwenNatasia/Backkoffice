@@ -65,7 +65,7 @@ class TambahJadwal: AppCompatActivity() {
         }
     }
     private fun fetchKaryawanData() {
-        val karyawanRef = db.child("karyawan")
+        val karyawanRef = db.child("auth")
 
         karyawanRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

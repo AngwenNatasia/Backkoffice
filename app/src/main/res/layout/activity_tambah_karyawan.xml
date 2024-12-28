@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <EditText
+    <Spinner
         android:id="@+id/in_nama"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
