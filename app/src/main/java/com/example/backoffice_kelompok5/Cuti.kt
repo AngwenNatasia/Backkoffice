@@ -5,8 +5,7 @@ data class Cuti(
     val durasi:Int,
     val tanggal: String,
     val divisi: String,
-    val alasan: String,
-    val status: String
+    val alasan: String
 ){
-    constructor() : this("", 0, "", "", "", "")
+    constructor() : this("", 0, "", "", "")
 }

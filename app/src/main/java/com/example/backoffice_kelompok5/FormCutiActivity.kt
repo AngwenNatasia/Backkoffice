@@ -33,13 +33,12 @@ class FormCutiActivity : Fragment() {
                 val durasi = lama.toIntOrNull() ?: 0
 
                 // Objek data cuti
-                val cuti = Izin(
+                val cuti = Cuti(
                     nama = "Nama User", // Ganti dengan data nama user yang sesuai
                     durasi = durasi,
                     tanggal = "Tanggal Cuti", // Ganti dengan data tanggal yang sesuai
                     divisi = "Divisi User", // Ganti dengan divisi user yang sesuai
-                    alasan = keteranganCuti,
-                    status = "Pending" // Misalnya, status awal adalah "Pending"
+                    alasan = keteranganCuti
                 )
 
                 val cutiId = database.child("cuti").push().key

@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-
+        <!-- Header Text: Izin Karyawan -->
         <TextView
             android:id="@+id/header"
             android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
             android:background="@drawable/gradient_button"
             android:padding="16dp" />
 
-
+        <!-- Nama (from database) -->
         <EditText
             android:id="@+id/nama"
             android:layout_width="match_parent"
@@ -36,9 +36,11 @@
             android:hint="Nama"
             android:background="#EAF5FF"
             android:padding="12dp"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            android:focusable="false"
+            android:enabled="false" /> <!-- Make it non-editable -->
 
-
+        <!-- Divisi (from database) -->
         <EditText
             android:id="@+id/divisi"
             android:layout_width="match_parent"
@@ -46,27 +48,22 @@
             android:hint="Divisi"
             android:background="#EAF5FF"
             android:padding="12dp"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            android:focusable="false"
+            android:enabled="false" /> <!-- Make it non-editable -->
 
-
-        <EditText
-            android:id="@+id/status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Status"
-            android:background="#EAF5FF"
-            android:padding="12dp"
-            android:layout_marginTop="12dp" />
-
+        <!-- Lama Izin (formatted as "1 hari") -->
         <EditText
             android:id="@+id/lama_izin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Lama Izin"
+            android:hint="Lama Izin (dihitung per hari, contoh: 1 hari)"
             android:background="#EAF5FF"
             android:padding="12dp"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            android:inputType="text" />
 
+        <!-- Keterangan Izin -->
         <EditText
             android:id="@+id/keterangan"
             android:layout_width="match_parent"
@@ -74,29 +71,50 @@
             android:hint="Keterangan Izin"
             android:background="#EAF5FF"
             android:padding="12dp"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            android:inputType="text" />
 
+        <!-- Tanggal Izin (formatted as "dd-mm-yyyy") -->
         <EditText
             android:id="@+id/tanggal_izin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tanggal Izin"
+            android:hint="Tanggal Izin (dd-mm-yyyy)"
             android:background="#EAF5FF"
             android:padding="12dp"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            android:inputType="date" />
 
-        <Button
-            android:id="@+id/submit"
-            android:layout_width="wrap_content"
+        <!-- LinearLayout for Back and Submit buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Submit"
-            android:layout_gravity="center"
-            app:backgroundTint="@null"
-            android:background="@drawable/gradient_button"
+            android:orientation="horizontal"
             android:layout_marginTop="24dp"
-            android:backgroundTint="#D769CD"
-            android:textColor="#FFFFFF"
-            android:padding="12dp" />
-    </LinearLayout>
+            android:gravity="center">
 
+            <!-- Back Button -->
+            <Button
+                android:id="@+id/back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back"
+                app:backgroundTint="@null"
+                android:background="@drawable/gradient_button"
+                android:textColor="#FFFFFF"
+                android:padding="12dp"
+                android:layout_marginEnd="16dp" />
+
+            <!-- Submit Button -->
+            <Button
+                android:id="@+id/submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                app:backgroundTint="@null"
+                android:background="@drawable/gradient_button"
+                android:textColor="#FFFFFF"
+                android:padding="12dp" />
+        </LinearLayout>
+    </LinearLayout>
 </ScrollView>

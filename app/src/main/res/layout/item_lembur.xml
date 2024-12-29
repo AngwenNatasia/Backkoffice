@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="?android:attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/tvNamaKaryawan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nama Karyawan"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvDivisi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Divisi"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvLamaLembur"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lama Lembur"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvTanggalLembur"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tanggal Lembur"
+        android:textSize="14sp" />
+
+</LinearLayout>

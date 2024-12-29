@@ -26,20 +26,16 @@ class FormLemburActivity : Fragment() {
         val database = FirebaseDatabase.getInstance().reference
 
         submitButton.setOnClickListener {
-            val lama = lamaLembur.text.toString()
+            val lama = lamaLembur.text.toString().toIntOrNull() // Konversi ke Int
             val keteranganLembur = keterangan.text.toString()
 
-            if (keteranganLembur.isNotEmpty() && lama.isNotEmpty()) {
-                val durasi = lama.toIntOrNull() ?: 0
-
+            if (keteranganLembur.isNotEmpty() && lama != null && lama > 0) {
                 // Objek data lembur
-                val lembur = Izin(
+                val lembur = Lembur(
                     nama = "Nama User", // Ganti dengan data nama user yang sesuai
-                    durasi = durasi,
+                    lama = lama, // Lama lembur sebagai Int
                     tanggal = "Tanggal Lembur", // Ganti dengan data tanggal yang sesuai
-                    divisi = "Divisi User", // Ganti dengan divisi user yang sesuai
-                    alasan = keteranganLembur,
-                    status = "Pending" // Misalnya, status awal adalah "Pending"
+                    divisi = "Divisi User" // Ganti dengan data divisi yang sesuai
                 )
 
                 val lemburId = database.child("lembur").push().key
@@ -56,7 +52,7 @@ class FormLemburActivity : Fragment() {
                         }
                 }
             } else {
-                Toast.makeText(requireContext(), "Harap isi semua field.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Harap isi semua field dengan benar.", Toast.LENGTH_SHORT).show()
             }
         }
 

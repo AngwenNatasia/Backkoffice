@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:background="#FFFFFF"
-    tools:context=".MainActivity">
+    tools:context=".LemburKaryawan">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-
+        <!-- Header -->
         <TextView
             android:id="@+id/header"
             android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
             android:background="@drawable/gradient_button"
             android:padding="16dp" />
 
-
+        <!-- Nama -->
         <EditText
             android:id="@+id/nama"
             android:layout_width="match_parent"
@@ -36,9 +36,11 @@
             android:hint="Nama"
             android:background="#EAF5FF"
             android:padding="12dp"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            android:focusable="false"
+            android:enabled="false" />
 
-
+        <!-- Divisi -->
         <EditText
             android:id="@+id/divisi"
             android:layout_width="match_parent"
@@ -46,48 +48,61 @@
             android:hint="Divisi"
             android:background="#EAF5FF"
             android:padding="12dp"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            android:focusable="false"
+            android:enabled="false" />
 
-
-        <EditText
-            android:id="@+id/status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Status"
-            android:background="#EAF5FF"
-            android:padding="12dp"
-            android:layout_marginTop="12dp" />
-
+        <!-- Lama Lembur -->
         <EditText
             android:id="@+id/lama_lembur"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Lama Lembur"
+            android:hint="Lama Lembur (contoh: 2 jam)"
             android:background="#EAF5FF"
             android:padding="12dp"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            android:inputType="number" />
 
+        <!-- Tanggal Lembur -->
         <EditText
             android:id="@+id/tanggal_lembur"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tanggal Lembur"
+            android:hint="Tanggal Lembur (dd-MM-yyyy)"
             android:background="#EAF5FF"
             android:padding="12dp"
             android:layout_marginTop="12dp" />
 
-        <Button
-            android:id="@+id/submit"
-            android:layout_width="wrap_content"
+        <!-- Submit & Back Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Submit"
-            android:layout_gravity="center"
-            app:backgroundTint="@null"
-            android:background="@drawable/gradient_button"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="#D769CD"
-            android:textColor="#FFFFFF"
-            android:padding="12dp" />
-    </LinearLayout>
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="24dp">
 
+            <Button
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back"
+                app:backgroundTint="@null"
+                android:background="@drawable/gradient_button"
+                android:layout_marginEnd="8dp"
+                android:textColor="#FFFFFF"
+                android:padding="12dp" />
+
+            <Button
+                android:id="@+id/submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                app:backgroundTint="@null"
+                android:background="@drawable/gradient_button"
+                android:layout_marginStart="8dp"
+                android:textColor="#FFFFFF"
+                android:padding="12dp" />
+        </LinearLayout>
+
+    </LinearLayout>
 </ScrollView>
