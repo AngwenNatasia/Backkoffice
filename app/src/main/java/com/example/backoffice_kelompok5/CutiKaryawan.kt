@@ -1,71 +1,124 @@
 package com.example.backoffice_kelompok5
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import java.text.SimpleDateFormat
+import java.util.*
 
-class CutiKaryawan : Fragment() {
+class CutiKaryawan : AppCompatActivity() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    private lateinit var database: DatabaseReference
 
-        val view = inflater.inflate(R.layout.fragment_cuti_karyawan, container, false)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.fragment_cuti_karyawan) // Pastikan nama layout XML sesuai
 
-        val nama = view.findViewById<EditText>(R.id.nama)
-        val divisi = view.findViewById<EditText>(R.id.divisi)
-        val status = view.findViewById<EditText>(R.id.status)
-        val lamaCuti = view.findViewById<EditText>(R.id.lama_Cuti)
-        val keterangan = view.findViewById<EditText>(R.id.keterangan)
-        val tanggal = view.findViewById<EditText>(R.id.tanggal_cuti)
-        val submitButton = view.findViewById<Button>(R.id.submit)
+        val nama = findViewById<EditText>(R.id.nama)
+        val divisi = findViewById<EditText>(R.id.divisi)
+        val lamaCuti = findViewById<EditText>(R.id.lama_cuti)
+        val keterangan = findViewById<EditText>(R.id.keterangan)
+        val tanggalCuti = findViewById<EditText>(R.id.tanggal_cuti)
+        val submitButton = findViewById<Button>(R.id.submit)
+        val backButton = findViewById<Button>(R.id.back)
 
-        val database = FirebaseDatabase.getInstance().reference
+        database = FirebaseDatabase.getInstance().reference
+        val sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("userId", null)
 
-        submitButton.setOnClickListener {
-            val namaKaryawan = nama.text.toString()
-            val divisiKaryawan = divisi.text.toString()
-            val statusKaryawan = status.text.toString()
-            val lama = lamaCuti.text.toString()
-            val tanggalCuti = tanggal.text.toString()
-            val keteranganCuti = keterangan.text.toString()
+        // Ambil data karyawan (nama dan divisi) dari Firebase dan set ke EditText
+        if (!userId.isNullOrEmpty()) {
+            database.child("auth").child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val namaKaryawan = snapshot.child("nama").getValue(String::class.java) ?: ""
+                        val divisiKaryawan = snapshot.child("divisi").getValue(String::class.java) ?: ""
 
-            if (namaKaryawan.isNotEmpty() && divisiKaryawan.isNotEmpty() && keteranganCuti.isNotEmpty() && lama.isNotEmpty() && statusKaryawan.isNotEmpty() && tanggalCuti.isNotEmpty()) {
+                        nama.setText(namaKaryawan)
+                        divisi.setText(divisiKaryawan)
 
-                val durasi = lama.toIntOrNull() ?: 0
-                val cuti = Cuti(namaKaryawan, durasi, tanggalCuti, divisiKaryawan, keteranganCuti, statusKaryawan)
-
-                val cutiId = database.child("cuti").push().key
-                if (cutiId != null) {
-                    database.child("cuti").child(cutiId).setValue(cuti)
-                        .addOnSuccessListener {
-
-                            Toast.makeText(requireContext(), "Cuti berhasil dicatat.", Toast.LENGTH_LONG).show()
-
-                            nama.text.clear()
-                            divisi.text.clear()
-                            status.text.clear()
-                            lamaCuti.text.clear()
-                            keterangan.text.clear()
-                            tanggal.text.clear()
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(requireContext(), "Gagal mencatat cuti.", Toast.LENGTH_SHORT).show()
-                        }
+                        // Nonaktifkan pengeditan
+                        nama.isEnabled = false
+                        divisi.isEnabled = false
+                    } else {
+                        Toast.makeText(this@CutiKaryawan, "Data pengguna tidak ditemukan!", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@CutiKaryawan, "Gagal memuat data: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } else {
+            Toast.makeText(this, "Sesi Anda telah berakhir. Silakan login kembali.", Toast.LENGTH_SHORT).show()
+        }
+
+        // Logika tombol Submit
+        submitButton.setOnClickListener {
+            val lama = lamaCuti.text.toString()
+            val tanggal = tanggalCuti.text.toString()
+            val keteranganCuti = keterangan.text.toString()
+
+            // Validasi input lama cuti (menggunakan string)
+            if (lama.isEmpty()) {
+                Toast.makeText(this, "Durasi cuti tidak boleh kosong.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Validasi tanggal dengan format string (contoh: yyyy-MM-dd)
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val date: Date? = try {
+                dateFormat.parse(tanggal)
+            } catch (e: Exception) {
+                null
+            }
+
+            if (date == null) {
+                Toast.makeText(this, "Tanggal harus dalam format yyyy-MM-dd.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Kirim data ke database
+            if (lama.isNotEmpty() && tanggal.isNotEmpty() && keteranganCuti.isNotEmpty()) {
+                val cutiId = database.child("cuti").push().key
+                if (cutiId != null) {
+                    val dataCuti = mapOf(
+                        "nama" to nama.text.toString(),
+                        "divisi" to divisi.text.toString(),
+                        "lamaCuti" to lama, // Menyimpan string seperti "3 minggu" atau "5 hari"
+                        "tanggalCuti" to tanggal,
+                        "keterangan" to keteranganCuti
+                    )
+
+                    database.child("cuti").child(cutiId).setValue(dataCuti)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Cuti berhasil dicatat.", Toast.LENGTH_LONG).show()
+
+                            // Kosongkan form kecuali nama dan divisi
+                            lamaCuti.text.clear()
+                            tanggalCuti.text.clear()
+                            keterangan.text.clear()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(this, "Gagal mencatat cuti: ${it.localizedMessage}", Toast.LENGTH_SHORT).show()
+                        }
+                }
             } else {
-                Toast.makeText(requireContext(), "Harap isi semua field.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Harap isi semua field.", Toast.LENGTH_SHORT).show()
             }
         }
 
-        return view
+        // Logika tombol Back
+        backButton.setOnClickListener {
+            finish() // Menutup aktivitas saat ini dan kembali ke MainActivity
+        }
     }
 }

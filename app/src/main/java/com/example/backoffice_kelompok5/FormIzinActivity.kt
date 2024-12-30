@@ -37,8 +37,8 @@ class FormIzinActivity : Fragment() {
                     durasi = durasi,
                     tanggal = "Tanggal Izin",
                     divisi = "Divisi User",
-                    alasan = keteranganIzin,
-                    status = "Pending"
+                    alasan = keteranganIzin
+
                 )
 
                 val izinId = database.child("izin").push().key

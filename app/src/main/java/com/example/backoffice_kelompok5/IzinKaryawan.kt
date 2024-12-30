@@ -1,76 +1,114 @@
 package com.example.backoffice_kelompok5
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
-class IzinKaryawan : Fragment() {
+class IzinKaryawan : AppCompatActivity() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    private lateinit var database: DatabaseReference
 
-        val view = inflater.inflate(R.layout.fragment_izin_karyawan, container, false)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.fragment_izin_karyawan) // Pastikan nama layout XML sesuai
 
-        val nama = view.findViewById<EditText>(R.id.nama)
-        val divisi = view.findViewById<EditText>(R.id.divisi)
-        val status = view.findViewById<EditText>(R.id.status)
-        val lamaIzin = view.findViewById<EditText>(R.id.lama_izin)
-        val keterangan = view.findViewById<EditText>(R.id.keterangan)
-        val tanggalIzin = view.findViewById<EditText>(R.id.tanggal_izin)
-        val submitButton = view.findViewById<Button>(R.id.submit)
+        val nama = findViewById<EditText>(R.id.nama)
+        val divisi = findViewById<EditText>(R.id.divisi)
+        val lamaIzin = findViewById<EditText>(R.id.lama_izin)
+        val keterangan = findViewById<EditText>(R.id.keterangan)
+        val tanggalIzin = findViewById<EditText>(R.id.tanggal_izin)
+        val submitButton = findViewById<Button>(R.id.submit)
+        val backButton = findViewById<Button>(R.id.back_button)
 
+        database = FirebaseDatabase.getInstance().reference
+        val sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getString("userId", null)
 
-        val database = FirebaseDatabase.getInstance().reference
+        // Ambil data karyawan (nama dan divisi) dari Firebase dan set ke EditText
+        if (!userId.isNullOrEmpty()) {
+            database.child("auth").child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val namaKaryawan = snapshot.child("nama").getValue(String::class.java) ?: ""
+                        val divisiKaryawan = snapshot.child("divisi").getValue(String::class.java) ?: ""
 
+                        nama.setText(namaKaryawan)
+                        divisi.setText(divisiKaryawan)
+
+                        // Nonaktifkan pengeditan
+                        nama.isEnabled = false
+                        divisi.isEnabled = false
+                    } else {
+                        Toast.makeText(this@IzinKaryawan, "Data pengguna tidak ditemukan!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@IzinKaryawan, "Gagal memuat data: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } else {
+            Toast.makeText(this, "Sesi Anda telah berakhir. Silakan login kembali.", Toast.LENGTH_SHORT).show()
+        }
+
+        // Logika tombol Submit
         submitButton.setOnClickListener {
-            val namaKaryawan = nama.text.toString()
-            val divisiKaryawan = divisi.text.toString()
-            val statusKaryawan = status.text.toString()
             val lama = lamaIzin.text.toString()
             val tanggal = tanggalIzin.text.toString()
             val keteranganIzin = keterangan.text.toString()
 
+            // Validasi input
+            val dateRegex = Regex("\\d{2}-\\d{2}-\\d{4}")
+            if (lama.toIntOrNull() == null || lama.toInt() <= 0) {
+                Toast.makeText(this, "Durasi izin harus berupa angka positif.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (!tanggal.matches(dateRegex)) {
+                Toast.makeText(this, "Tanggal harus dalam format dd-MM-yyyy.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-            if (namaKaryawan.isNotEmpty() && divisiKaryawan.isNotEmpty() && keteranganIzin.isNotEmpty() && lama.isNotEmpty() && statusKaryawan.isNotEmpty() && tanggal.isNotEmpty()) {
-
-                val durasi = lama.toIntOrNull() ?: 0
-                val izin = Izin(namaKaryawan, durasi, tanggal, divisiKaryawan, keteranganIzin, statusKaryawan)
-
+            // Kirim data ke database
+            if (lama.isNotEmpty() && tanggal.isNotEmpty() && keteranganIzin.isNotEmpty()) {
                 val izinId = database.child("izin").push().key
                 if (izinId != null) {
-                    database.child("izin").child(izinId).setValue(izin)
+                    val dataIzin = mapOf(
+                        "nama" to nama.text.toString(),
+                        "divisi" to divisi.text.toString(),
+                        "lamaIzin" to lama,
+                        "tanggalIzin" to tanggal,
+                        "keterangan" to keteranganIzin
+                    )
+
+                    database.child("izin").child(izinId).setValue(dataIzin)
                         .addOnSuccessListener {
+                            Toast.makeText(this, "Izin berhasil dicatat.", Toast.LENGTH_LONG).show()
 
-                            Toast.makeText(requireContext(), "Izin berhasil dicatat.", Toast.LENGTH_LONG).show()
-
-
-                            nama.text.clear()
-                            divisi.text.clear()
-                            status.text.clear()
+                            // Kosongkan form kecuali nama dan divisi
                             lamaIzin.text.clear()
-                            keterangan.text.clear()
                             tanggalIzin.text.clear()
+                            keterangan.text.clear()
                         }
                         .addOnFailureListener {
-
-                            Toast.makeText(requireContext(), "Gagal mencatat izin.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Gagal mencatat izin: ${it.localizedMessage}", Toast.LENGTH_SHORT).show()
                         }
                 }
-
             } else {
-
-                Toast.makeText(requireContext(), "Harap isi semua field.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Harap isi semua field.", Toast.LENGTH_SHORT).show()
             }
         }
 
-        return view
+        // Logika tombol Back
+        backButton.setOnClickListener {
+            finish() // Menutup aktivitas saat ini dan kembali ke MainActivity
+        }
     }
 }

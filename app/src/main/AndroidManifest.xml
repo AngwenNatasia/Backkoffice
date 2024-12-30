@@ -23,6 +23,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivityKaryawan" />
+        <activity android:name=".LemburKaryawan"/>
+        <activity android:name=".IzinKaryawan"/>
+        <activity android:name=".CutiKaryawan"/>
         <activity android:name=".Login" />
         <activity android:name=".Register" />
         <activity android:name=".Admin" />
@@ -36,5 +39,7 @@
         <activity android:name=".FormIzinActivity" />
         <activity android:name=".FormCutiActivity" />
         <activity android:name=".FormLemburActivity" />
+
+
     </application>
 </manifest>
