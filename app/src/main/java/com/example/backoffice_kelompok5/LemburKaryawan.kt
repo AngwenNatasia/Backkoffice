@@ -18,7 +18,7 @@ class LemburKaryawan : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_lembur_karyawan) // Pastikan nama layout XML sesuai
+        setContentView(R.layout.fragment_lembur_karyawan)
 
         val nama = findViewById<EditText>(R.id.nama)
         val divisi = findViewById<EditText>(R.id.divisi)
@@ -31,7 +31,7 @@ class LemburKaryawan : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("userId", null)
 
-        // Ambil data karyawan (nama dan divisi) dari Firebase dan set ke EditText
+
         if (!userId.isNullOrEmpty()) {
             database.child("auth").child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -42,7 +42,7 @@ class LemburKaryawan : AppCompatActivity() {
                         nama.setText(namaKaryawan)
                         divisi.setText(divisiKaryawan)
 
-                        // Nonaktifkan pengeditan
+
                         nama.isEnabled = false
                         divisi.isEnabled = false
                     } else {
@@ -58,12 +58,12 @@ class LemburKaryawan : AppCompatActivity() {
             Toast.makeText(this, "Sesi Anda telah berakhir. Silakan login kembali.", Toast.LENGTH_SHORT).show()
         }
 
-        // Logika tombol Submit
+
         submitButton.setOnClickListener {
             val lama = lamaLembur.text.toString()
             val tanggal = tanggalLembur.text.toString()
 
-            // Validasi input
+
             val dateRegex = Regex("\\d{2}-\\d{2}-\\d{4}")
             if (lama.toIntOrNull() == null || lama.toInt() <= 0) {
                 Toast.makeText(this, "Durasi lembur harus berupa angka positif.", Toast.LENGTH_SHORT).show()
@@ -74,7 +74,7 @@ class LemburKaryawan : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Kirim data ke database
+
             if (lama.isNotEmpty() && tanggal.isNotEmpty()) {
                 val lemburId = database.child("lembur").push().key
                 if (lemburId != null) {
@@ -89,7 +89,7 @@ class LemburKaryawan : AppCompatActivity() {
                         .addOnSuccessListener {
                             Toast.makeText(this, "Lembur berhasil dicatat.", Toast.LENGTH_LONG).show()
 
-                            // Kosongkan form kecuali nama dan divisi
+
                             lamaLembur.text.clear()
                             tanggalLembur.text.clear()
                         }
@@ -102,9 +102,9 @@ class LemburKaryawan : AppCompatActivity() {
             }
         }
 
-        // Logika tombol Back
+
         backButton.setOnClickListener {
-            finish() // Menutup aktivitas saat ini dan kembali ke MainActivity
+            finish()
         }
     }
 }

@@ -20,7 +20,7 @@ class CutiKaryawan : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_cuti_karyawan) // Pastikan nama layout XML sesuai
+        setContentView(R.layout.fragment_cuti_karyawan)
 
         val nama = findViewById<EditText>(R.id.nama)
         val divisi = findViewById<EditText>(R.id.divisi)
@@ -34,7 +34,7 @@ class CutiKaryawan : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("userId", null)
 
-        // Ambil data karyawan (nama dan divisi) dari Firebase dan set ke EditText
+
         if (!userId.isNullOrEmpty()) {
             database.child("auth").child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -45,7 +45,7 @@ class CutiKaryawan : AppCompatActivity() {
                         nama.setText(namaKaryawan)
                         divisi.setText(divisiKaryawan)
 
-                        // Nonaktifkan pengeditan
+
                         nama.isEnabled = false
                         divisi.isEnabled = false
                     } else {
@@ -61,19 +61,19 @@ class CutiKaryawan : AppCompatActivity() {
             Toast.makeText(this, "Sesi Anda telah berakhir. Silakan login kembali.", Toast.LENGTH_SHORT).show()
         }
 
-        // Logika tombol Submit
+
         submitButton.setOnClickListener {
             val lama = lamaCuti.text.toString()
             val tanggal = tanggalCuti.text.toString()
             val keteranganCuti = keterangan.text.toString()
 
-            // Validasi input lama cuti (menggunakan string)
+
             if (lama.isEmpty()) {
                 Toast.makeText(this, "Durasi cuti tidak boleh kosong.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Validasi tanggal dengan format string (contoh: yyyy-MM-dd)
+
             val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val date: Date? = try {
                 dateFormat.parse(tanggal)
@@ -86,14 +86,14 @@ class CutiKaryawan : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Kirim data ke database
+
             if (lama.isNotEmpty() && tanggal.isNotEmpty() && keteranganCuti.isNotEmpty()) {
                 val cutiId = database.child("cuti").push().key
                 if (cutiId != null) {
                     val dataCuti = mapOf(
                         "nama" to nama.text.toString(),
                         "divisi" to divisi.text.toString(),
-                        "lamaCuti" to lama, // Menyimpan string seperti "3 minggu" atau "5 hari"
+                        "lamaCuti" to lama,
                         "tanggalCuti" to tanggal,
                         "keterangan" to keteranganCuti
                     )
@@ -102,7 +102,7 @@ class CutiKaryawan : AppCompatActivity() {
                         .addOnSuccessListener {
                             Toast.makeText(this, "Cuti berhasil dicatat.", Toast.LENGTH_LONG).show()
 
-                            // Kosongkan form kecuali nama dan divisi
+
                             lamaCuti.text.clear()
                             tanggalCuti.text.clear()
                             keterangan.text.clear()
@@ -116,9 +116,9 @@ class CutiKaryawan : AppCompatActivity() {
             }
         }
 
-        // Logika tombol Back
+
         backButton.setOnClickListener {
-            finish() // Menutup aktivitas saat ini dan kembali ke MainActivity
+            finish()
         }
     }
 }

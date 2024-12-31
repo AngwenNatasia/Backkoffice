@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Header -->
+
         <TextView
             android:id="@+id/header"
             android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
             android:background="@drawable/gradient_button"
             android:padding="16dp" />
 
-        <!-- Nama -->
+
         <EditText
             android:id="@+id/nama"
             android:layout_width="match_parent"
@@ -38,7 +38,7 @@
             android:padding="12dp"
             android:layout_marginTop="12dp" />
 
-        <!-- Divisi -->
+
         <EditText
             android:id="@+id/divisi"
             android:layout_width="match_parent"
@@ -48,38 +48,41 @@
             android:padding="12dp"
             android:layout_marginTop="12dp" />
 
-        <!-- Lama Cuti -->
+
         <EditText
             android:id="@+id/lama_cuti"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Lama Cuti (contoh: 2 minggu)"
+            android:textColorHint="@color/gray_hint"
             android:background="#EAF5FF"
             android:padding="12dp"
             android:layout_marginTop="12dp"
             android:inputType="text" />
 
-        <!-- Keterangan Izin -->
+
         <EditText
             android:id="@+id/keterangan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Keterangan Izin"
+            android:textColorHint="@color/gray_hint"
             android:background="#EAF5FF"
             android:padding="12dp"
             android:layout_marginTop="12dp" />
 
-        <!-- Tanggal Cuti -->
+
         <EditText
             android:id="@+id/tanggal_cuti"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Tanggal Cuti (dd-MM-yyyy sampai dd-MM-yyyy)"
+            android:textColorHint="@color/gray_hint"
             android:background="#EAF5FF"
             android:padding="12dp"
             android:layout_marginTop="12dp" />
 
-        <!-- Buttons (Back & Submit) -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -87,7 +90,7 @@
             android:gravity="center"
             android:layout_marginTop="24dp">
 
-            <!-- Back Button -->
+
             <Button
                 android:id="@+id/back"
                 android:layout_width="wrap_content"
@@ -99,7 +102,7 @@
                 android:textColor="#FFFFFF"
                 android:padding="12dp" />
 
-            <!-- Submit Button -->
+
             <Button
                 android:id="@+id/submit"
                 android:layout_width="wrap_content"
