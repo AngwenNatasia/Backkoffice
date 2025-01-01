@@ -8,20 +8,27 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.Executor
 
 class MainActivityKaryawan : AppCompatActivity() {
     private lateinit var tvWelcome: TextView
     private lateinit var tvSchedule: TextView
     private lateinit var btnHadir: Button
-    private lateinit var btnLembur: Button // Declare lembur button
+    private lateinit var btnBiometrik: Button
+    private lateinit var btnLembur: Button
     private lateinit var btnLogout: Button
     private lateinit var btnCuti: Button
     private lateinit var btnIzin: Button
     private lateinit var database: DatabaseReference
     private lateinit var sharedPreferences: SharedPreferences
+
+    private lateinit var biometricPrompt: BiometricPrompt
+    private lateinit var biometricExecutor: Executor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +38,7 @@ class MainActivityKaryawan : AppCompatActivity() {
         tvWelcome = findViewById(R.id.tv_welcome)
         tvSchedule = findViewById(R.id.tv_schedule)
         btnHadir = findViewById(R.id.btn_hadir)
+        btnBiometrik = findViewById(R.id.btn_biometrik)
         btnLembur = findViewById(R.id.btn_lembur)
         btnCuti = findViewById(R.id.btn_cuti)
         btnIzin = findViewById(R.id.btn_izin)
@@ -39,14 +47,23 @@ class MainActivityKaryawan : AppCompatActivity() {
         sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         database = FirebaseDatabase.getInstance().reference
 
-        // Display user info and schedule
+        biometricExecutor = ContextCompat.getMainExecutor(this)
+        biometricPrompt = createBiometricPrompt()
+
+
         displayUserName()
         displayUserSchedule()
 
-        // Handle attendance button click
+
         btnHadir.setOnClickListener {
-            markAttendance()
+            recordAttendance()
         }
+
+
+        btnBiometrik.setOnClickListener {
+            biometricPrompt.authenticate(createBiometricPromptInfo())
+        }
+
         btnCuti.setOnClickListener {
             val intent = Intent(this, CutiKaryawan::class.java)
             startActivity(intent)
@@ -57,31 +74,31 @@ class MainActivityKaryawan : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Handle lembur button click (navigate to lembur fragment)
+
         btnLembur.setOnClickListener {
             val intent = Intent(this@MainActivityKaryawan, LemburKaryawan::class.java)
             startActivity(intent)
         }
 
-        // Handle logout button click
+
         btnLogout.setOnClickListener {
             logoutUser()
         }
     }
 
     private fun logoutUser() {
-        // Clear the shared preferences to log out
+
         val editor = sharedPreferences.edit()
-        editor.clear() // Clear all saved preferences
+        editor.clear()
         editor.apply()
 
-        // Show a message
+
         Toast.makeText(this, "Anda telah logout", Toast.LENGTH_SHORT).show()
 
-        // Navigate back to Login activity
-        val intent = Intent(this@MainActivityKaryawan, Login::class.java)
+
+        val intent = Intent(this@MainActivityKaryawan, MainActivity::class.java)
         startActivity(intent)
-        finish() // Finish current activity to prevent going back to MainActivityKaryawan
+        finish()
     }
 
     private fun displayUserName() {
@@ -147,7 +164,7 @@ class MainActivityKaryawan : AppCompatActivity() {
         })
     }
 
-    private fun markAttendance() {
+    private fun recordAttendance() {
         val userId = sharedPreferences.getString("userId", null)
         if (userId.isNullOrEmpty()) {
             Toast.makeText(this, "User ID tidak ditemukan!", Toast.LENGTH_SHORT).show()
@@ -180,6 +197,33 @@ class MainActivityKaryawan : AppCompatActivity() {
 
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(this@MainActivityKaryawan, "Gagal memuat data: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun createBiometricPromptInfo(): BiometricPrompt.PromptInfo {
+        return BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Verifikasi Biometrik")
+            .setSubtitle("Gunakan sidik jari Anda untuk mencatat presensi")
+            .setNegativeButtonText("Batal")
+            .build()
+    }
+
+    private fun createBiometricPrompt(): BiometricPrompt {
+        return BiometricPrompt(this, biometricExecutor, object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                super.onAuthenticationSucceeded(result)
+                recordAttendance()
+            }
+
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                super.onAuthenticationError(errorCode, errString)
+                Toast.makeText(this@MainActivityKaryawan, "Autentikasi gagal: $errString", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+                Toast.makeText(this@MainActivityKaryawan, "Autentikasi tidak berhasil. Coba lagi.", Toast.LENGTH_SHORT).show()
             }
         })
     }

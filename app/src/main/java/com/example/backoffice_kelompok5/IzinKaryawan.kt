@@ -18,7 +18,7 @@ class IzinKaryawan : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_izin_karyawan) // Pastikan nama layout XML sesuai
+        setContentView(R.layout.fragment_izin_karyawan)
 
         val nama = findViewById<EditText>(R.id.nama)
         val divisi = findViewById<EditText>(R.id.divisi)
@@ -32,7 +32,7 @@ class IzinKaryawan : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getString("userId", null)
 
-        // Ambil data karyawan (nama dan divisi) dari Firebase dan set ke EditText
+
         if (!userId.isNullOrEmpty()) {
             database.child("auth").child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -43,7 +43,7 @@ class IzinKaryawan : AppCompatActivity() {
                         nama.setText(namaKaryawan)
                         divisi.setText(divisiKaryawan)
 
-                        // Nonaktifkan pengeditan
+
                         nama.isEnabled = false
                         divisi.isEnabled = false
                     } else {
@@ -59,7 +59,7 @@ class IzinKaryawan : AppCompatActivity() {
             Toast.makeText(this, "Sesi Anda telah berakhir. Silakan login kembali.", Toast.LENGTH_SHORT).show()
         }
 
-        // Logika tombol Submit
+
         submitButton.setOnClickListener {
             val lama = lamaIzin.text.toString()
             val tanggal = tanggalIzin.text.toString()
@@ -92,7 +92,7 @@ class IzinKaryawan : AppCompatActivity() {
                         .addOnSuccessListener {
                             Toast.makeText(this, "Izin berhasil dicatat.", Toast.LENGTH_LONG).show()
 
-                            // Kosongkan form kecuali nama dan divisi
+
                             lamaIzin.text.clear()
                             tanggalIzin.text.clear()
                             keterangan.text.clear()
@@ -106,9 +106,9 @@ class IzinKaryawan : AppCompatActivity() {
             }
         }
 
-        // Logika tombol Back
+
         backButton.setOnClickListener {
-            finish() // Menutup aktivitas saat ini dan kembali ke MainActivity
+            finish()
         }
     }
 }
