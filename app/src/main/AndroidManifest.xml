@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-
-    <!--    <uses-permission android:name="android.permission.INTERNET" />-->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -41,7 +40,7 @@
         <activity android:name=".FormIzinActivity" />
         <activity android:name=".FormCutiActivity" />
         <activity android:name=".FormLemburActivity" />
-
-
+        <activity android:name=".HalamanPerIzin" />
+        <activity android:name=".HalamanPerCuti" />
     </application>
 </manifest>
