@@ -1,6 +1,7 @@
 package com.example.backoffice_kelompok5
 
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.*
@@ -8,11 +9,13 @@ import java.util.*
 import java.text.SimpleDateFormat
 
 class TambahKaryawan: AppCompatActivity() {
+    private lateinit var dbRef: DatabaseReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tambah_karyawan)
 
-        val nama = findViewById<EditText>(R.id.in_nama)
+        val nama = findViewById<Spinner>(R.id.in_nama)
         val divisi = findViewById<Spinner>(R.id.in_divisi)
         val jabatan = findViewById<EditText>(R.id.in_jabatan)
         val departemen = findViewById<EditText>(R.id.in_departemen)
@@ -22,10 +25,10 @@ class TambahKaryawan: AppCompatActivity() {
         val simpanKywn = findViewById<Button>(R.id.simpanKywn)
 
         // Spinner Divisi
-        val divisiOptions = listOf("IT", "Administrator", "Kepegawaian")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, divisiOptions)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        divisi.adapter = adapter
+//        val divisiOptions = listOf("IT", "Administrator", "Kepegawaian")
+//        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, divisiOptions)
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        divisi.adapter = adapter
 
         // Spinner Jenis Kelamin
         val jenisKelaminOptions = listOf("Pria", "Wanita")
@@ -33,8 +36,47 @@ class TambahKaryawan: AppCompatActivity() {
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         jenisKelamin.adapter = adapter2
 
+        // Referensi ke tabel "auth"
+        dbRef = FirebaseDatabase.getInstance().getReference("auth")
+
+        // Mengambil data nama dan divisi
+        dbRef.get().addOnSuccessListener { snapshot ->
+            val namaList = mutableListOf<String>()
+            val divisiMap = mutableMapOf<String, String>()
+
+            for (userSnapshot in snapshot.children) {
+                val nama = userSnapshot.child("nama").value.toString()
+                val divisi = userSnapshot.child("divisi").value.toString()
+
+                namaList.add(nama)
+                divisiMap[nama] = divisi // Pemetaan nama ke divisi
+            }
+
+            // Set data ke spinner nama
+            val namaAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, namaList)
+            namaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            nama.adapter = namaAdapter
+
+            // Update divisi spinner berdasarkan nama yang dipilih
+            nama.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val selectedNama = namaList[position]
+                    val selectedDivisi = divisiMap[selectedNama] ?: ""
+
+                    // Set divisi spinner dengan divisi yang sesuai
+                    val divisiAdapter = ArrayAdapter(this@TambahKaryawan, android.R.layout.simple_spinner_item, listOf(selectedDivisi))
+                    divisiAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    divisi.adapter = divisiAdapter
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+        }.addOnFailureListener {
+            Toast.makeText(this, "Gagal mengambil data pengguna", Toast.LENGTH_SHORT).show()
+        }
+
         simpanKywn.setOnClickListener {
-            val nama = nama.text.toString().trim()
+            val nama = nama.selectedItem.toString()
             val divisi = divisi.selectedItem.toString()
             val jabatan = jabatan.text.toString().trim()
             val departemen = departemen.text.toString().trim()
