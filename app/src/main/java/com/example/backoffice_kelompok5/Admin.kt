@@ -26,8 +26,6 @@ class Admin : AppCompatActivity() {
 
         viewPagerAdapter.tambahFragment(JadwalFragment(), "Jadwal")
         viewPagerAdapter.tambahFragment(ManajemenDataFragment(), "Manajemen Data")
-        viewPagerAdapter.tambahFragment(PerizinFragment(), "Manajemen Izin")
-        viewPagerAdapter.tambahFragment(PercutiFragment(), "Manajemen Cuti")
 
         viewPager.adapter = viewPagerAdapter
         tabLayout.setupWithViewPager(viewPager)

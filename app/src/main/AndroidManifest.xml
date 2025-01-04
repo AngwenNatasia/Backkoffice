@@ -40,7 +40,5 @@
         <activity android:name=".FormIzinActivity" />
         <activity android:name=".FormCutiActivity" />
         <activity android:name=".FormLemburActivity" />
-        <activity android:name=".HalamanPerIzin" />
-        <activity android:name=".HalamanPerCuti" />
     </application>
 </manifest>
