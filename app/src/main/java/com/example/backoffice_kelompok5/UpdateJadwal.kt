@@ -15,6 +15,7 @@ class UpdateJadwal : AppCompatActivity() {
     private lateinit var upJamKeluar: EditText
     private lateinit var btnUpdate: Button
     private lateinit var btnDelete: Button
+    private var originalNamaKaryawan: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +38,7 @@ class UpdateJadwal : AppCompatActivity() {
         fetchKaryawanData()
 
         btnUpdate.setOnClickListener {
-            val selectedNama = upNamaKywn.selectedItem.toString().trim()
+            val selectedNama = upNamaKywn.selectedItem?.toString()?.trim() ?: ""
             val updatedJadwal = Jadwal(
                 id = jadwalId,
                 nama = selectedNama,
@@ -75,6 +76,7 @@ class UpdateJadwal : AppCompatActivity() {
                 upHari.setText(jadwal.hari)
                 upJamMasuk.setText(jadwal.jamMasuk)
                 upJamKeluar.setText(jadwal.jamKeluar)
+                originalNamaKaryawan = jadwal.nama
                 setSelectedNamaKaryawan(jadwal.nama)
             } else {
                 Toast.makeText(this, "Jadwal tidak ditemukan", Toast.LENGTH_SHORT).show()
@@ -87,28 +89,26 @@ class UpdateJadwal : AppCompatActivity() {
 
     private fun fetchKaryawanData() {
         val karyawanRef = FirebaseDatabase.getInstance().getReference("auth")
-        karyawanRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                karyawanNamaList.clear()
-                for (data in snapshot.children) {
-                    val karyawan = data.getValue(Karyawan::class.java)
-                    if (karyawan != null) {
-                        karyawanNamaList.add(karyawan.nama)
-                    }
-                }
-                val adapter = ArrayAdapter(
-                    this@UpdateJadwal,
-                    android.R.layout.simple_spinner_item,
-                    karyawanNamaList
-                )
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                upNamaKywn.adapter = adapter
+        karyawanRef.get().addOnSuccessListener { snapshot ->
+            karyawanNamaList.clear()
+            for (data in snapshot.children) {
+                val nama = data.child("nama").value.toString()
+                karyawanNamaList.add(nama)
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@UpdateJadwal, "Gagal memuat data karyawan", Toast.LENGTH_SHORT).show()
-            }
-        })
+            val adapter = ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_item,
+                karyawanNamaList
+            )
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            upNamaKywn.adapter = adapter
+
+            // Jika data jadwal sudah di-load, pastikan Spinner menampilkan nama yang sesuai
+            originalNamaKaryawan?.let { setSelectedNamaKaryawan(it) }
+        }.addOnFailureListener {
+            Toast.makeText(this, "Gagal memuat data karyawan", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun setSelectedNamaKaryawan(nama: String) {
