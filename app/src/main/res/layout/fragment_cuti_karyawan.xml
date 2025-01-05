@@ -65,7 +65,7 @@
             android:id="@+id/keterangan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Keterangan Izin"
+            android:hint="Keterangan Cuti"
             android:textColorHint="@color/gray_hint"
             android:background="#EAF5FF"
             android:padding="12dp"
