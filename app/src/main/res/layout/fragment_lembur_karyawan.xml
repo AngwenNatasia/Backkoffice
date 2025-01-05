@@ -59,6 +59,7 @@
             android:layout_height="wrap_content"
             android:hint="Lama Lembur (contoh: 2 jam)"
             android:background="#EAF5FF"
+            android:textColorHint="@color/gray_hint"
             android:padding="12dp"
             android:layout_marginTop="12dp"
             android:inputType="number" />
@@ -69,6 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Tanggal Lembur (dd-MM-yyyy)"
+            android:textColorHint="@color/gray_hint"
             android:background="#EAF5FF"
             android:padding="12dp"
             android:layout_marginTop="12dp" />
