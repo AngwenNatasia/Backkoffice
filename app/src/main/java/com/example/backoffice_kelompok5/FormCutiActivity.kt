@@ -32,12 +32,11 @@ class FormCutiActivity : Fragment() {
             if (keteranganCuti.isNotEmpty() && lama.isNotEmpty()) {
                 val durasi = lama.toIntOrNull() ?: 0
 
-                // Objek data cuti
                 val cuti = Cuti(
-                    nama = "Nama User", // Ganti dengan data nama user yang sesuai
+                    nama = "Nama User",
                     durasi = durasi,
-                    tanggal = "Tanggal Cuti", // Ganti dengan data tanggal yang sesuai
-                    divisi = "Divisi User", // Ganti dengan divisi user yang sesuai
+                    tanggal = "Tanggal Cuti",
+                    divisi = "Divisi User",
                     alasan = keteranganCuti
                 )
 

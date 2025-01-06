@@ -26,16 +26,16 @@ class FormLemburActivity : Fragment() {
         val database = FirebaseDatabase.getInstance().reference
 
         submitButton.setOnClickListener {
-            val lama = lamaLembur.text.toString().toIntOrNull() // Konversi ke Int
+            val lama = lamaLembur.text.toString().toIntOrNull()
             val keteranganLembur = keterangan.text.toString()
 
             if (keteranganLembur.isNotEmpty() && lama != null && lama > 0) {
-                // Objek data lembur
+
                 val lembur = Lembur(
-                    nama = "Nama User", // Ganti dengan data nama user yang sesuai
-                    lama = lama, // Lama lembur sebagai Int
-                    tanggal = "Tanggal Lembur", // Ganti dengan data tanggal yang sesuai
-                    divisi = "Divisi User" // Ganti dengan data divisi yang sesuai
+                    nama = "Nama User",
+                    lama = lama,
+                    tanggal = "Tanggal Lembur",
+                    divisi = "Divisi User"
                 )
 
                 val lemburId = database.child("lembur").push().key
